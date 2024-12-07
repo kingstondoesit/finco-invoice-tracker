@@ -12,6 +12,18 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+    // screens: {
+    //   widescreen:{'raw':'(min-aspect-ratio:3/2)'},
+    //   tallscreen:{'raw':'(max-aspect-ratio:13/20)'},
+    //   tablet: '640px',
+    //   // => @media (min-width: 640px) { ... }
+  
+    //   laptop: '1024px',
+    //   // => @media (min-width: 1024px) { ... }
+  
+    //   desktop: '1280px',
+    //   // => @media (min-width: 1280px) { ... }
+    //   },
     },
   },
   plugins: [],
