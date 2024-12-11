@@ -46,6 +46,13 @@ const customers = [
     email: 'balazs@orban.com',
     image_url: '/customers/balazs-orban.png',
   },
+
+  {
+    id: 'b071e0c9-fd45-4127-9ada-8949cc4f60f9',
+    name: 'Jordan Brew',
+    email: 'jordan@brew.com',
+    image_url: '/customers/jordan-brew.png',
+  },
 ];
 
 const invoices = [
@@ -126,6 +133,18 @@ const invoices = [
     amount: 1000,
     status: 'paid',
     date: '2022-06-05',
+  },
+  {
+    customer_id: customers[6].id,
+    amount: 1200,
+    status: 'pending',
+    date: '2023-02-15',
+  },
+  {
+    customer_id: customers[6].id,
+    amount: 2250,
+    status: 'paid',
+    date: '2023-02-15',
   },
 ];
 
