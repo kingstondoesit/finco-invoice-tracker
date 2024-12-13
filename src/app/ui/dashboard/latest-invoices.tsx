@@ -3,11 +3,15 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { lusitana } from '@/app/ui/fonts';
 import { LatestInvoice } from '@/app/lib/definitions';
-export default async function LatestInvoices({
-  latestInvoices,
-}: {
-  latestInvoices: LatestInvoice[];
-}) {
+import { fetchLatestInvoices } from '@/app/lib/data';
+
+export default async function LatestInvoices() {
+  const latestInvoices: LatestInvoice[] = await fetchLatestInvoices();
+
+  if (!latestInvoices || latestInvoices.length === 0) {
+    return <p className="mt-4 text-gray-400">No data available.</p>;
+  }
+
   return (
     <div className="flex w-full flex-col md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
@@ -17,14 +21,14 @@ export default async function LatestInvoices({
         {/* NOTE: Uncomment this code in Chapter 7 */}
 
         <div className="bg-white px-6">
-          {latestInvoices.map((invoice, i) => {
+          {latestInvoices.map((invoice, index) => {
             return (
               <div
                 key={invoice.id}
                 className={clsx(
                   'flex flex-row items-center justify-between py-4',
                   {
-                    'border-t': i !== 0,
+                    'border-t': index !== 0,
                   },
                 )}
               >
