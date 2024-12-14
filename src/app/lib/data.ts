@@ -23,9 +23,15 @@ const client = new Client({
 
 export async function fetchRevenue() {
   try {
+    // We artificially delay a response for demo purposes.
+    // Don't do this in production :)
+    // const waitTime: number = 3000;
+    // console.log('Fetching revenue data...');
+    // await new Promise((resolve) => setTimeout(resolve, waitTime));
+
     // Fetch data from the revenue table  
     const data = await client.query<Revenue>('SELECT * FROM revenue');
-    console.log('Revenue Data fetched successfully 🟢');
+    // console.log(`Revenue Data fetched successfully after ${waitTime/1000} seconds 🟢`);
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
