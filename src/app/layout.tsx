@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: "Seamlessly Generate, Track, and Manage Customer Invoices",
 };
 
+export const experimental_ppr = true;
+
 export default function RootLayout({children,}: Readonly<{children: React.ReactNode;}>) {
   return (
     <html lang="en">
