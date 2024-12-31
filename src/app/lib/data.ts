@@ -1,5 +1,5 @@
 import {
-  LatestInvoiceRaw,
+  LatestInvoiceRaw, InvoicesTable,
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
@@ -88,5 +88,44 @@ export async function fetchCardData() {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch card data 🔴');
+  }
+}
+
+const ITEMS_PER_PAGE = 10;
+export async function fetchFilteredInvoices(
+  query: string | undefined,
+  currentPage: number,
+) {
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  const queryString = query ?? '';
+  console.log('queryString', queryString);
+  console.log('offset', offset);
+  try {
+    const invoices = await client.query<InvoicesTable>(`  
+      SELECT  
+        invoices.id,  
+        invoices.amount,  
+        invoices.date,  
+        invoices.status,  
+        customers.name,  
+        customers.email,  
+        customers.image_url  
+      FROM invoices  
+      JOIN customers ON invoices.customer_id = customers.id  
+      WHERE  
+        customers.name ILIKE $1 OR  
+        customers.email ILIKE $1 OR  
+        invoices.amount::text ILIKE $1 OR  
+        invoices.date::text ILIKE $1 OR  
+        invoices.status ILIKE $1  
+      ORDER BY invoices.date DESC  
+      LIMIT $2 OFFSET $3  
+    `, [`%${query}%`, ITEMS_PER_PAGE, offset]);
+
+    console.log('Filtered Invoices fetched successfully 🟢');
+    return invoices.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch filtered invoices 🔴');
   }
 }
