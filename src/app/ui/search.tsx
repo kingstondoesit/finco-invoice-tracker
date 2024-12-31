@@ -10,13 +10,15 @@ export default function Search({ placeholder }: { placeholder: string }) {
   const handleSearch = useDebouncedCallback((term) => {
     console.log(`Searching... ${term}`);
    
+    // Trim the term and replace multiple spaces with a single space
+    const cleanedTerm: string = term.trim().replace(/\s+/g, ' ');
+
     const params = new URLSearchParams(searchParams);
-    if (term) {
-      params.set('query', term);
+    if (cleanedTerm) {
+      params.set('query', cleanedTerm);
       params.set('page', '1'); // Reset page to 1 when a new search term is entered
     } else {
       params.delete('query');
-      params.delete('page'); // Remove page parameter if no search term
     }
     replace(`${pathname}?${params.toString()}`);
   }, 150);
