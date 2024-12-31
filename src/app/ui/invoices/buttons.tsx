@@ -27,12 +27,14 @@ export function UpdateInvoice({ id }: { id: string }) {
 export function DeleteInvoice({ id }: { id: string }) {
   return (
     <>
+      <Link href={`/dashboard/invoices/delete/${id}`}>
       <button
         type="button"
         className="rounded-md border p-2 hover:bg-gray-100"
       >
         <TrashIcon className="w-5" />
       </button>
+      </Link>
     </>
   );
 }
