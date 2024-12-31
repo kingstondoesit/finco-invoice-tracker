@@ -14,7 +14,10 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        blue: {
+          500: "#1D6EF6",
       },
+    },
     // screens: {
     //   widescreen:{'raw':'(min-aspect-ratio:3/2)'},
     //   tallscreen:{'raw':'(max-aspect-ratio:13/20)'},
