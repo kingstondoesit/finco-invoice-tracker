@@ -129,3 +129,24 @@ export async function fetchFilteredInvoices(
     throw new Error('Failed to fetch filtered invoices 🔴');
   }
 }
+
+export async function fetchInvoicesPages(query: string) {  
+  try {  
+    const count = await client.query(`  
+      SELECT COUNT(*)  
+      FROM invoices  
+      JOIN customers ON invoices.customer_id = customers.id  
+      WHERE customers.name ILIKE $1  
+      OR customers.email ILIKE $1  
+      OR invoices.amount::text ILIKE $1  
+      OR invoices.date::text ILIKE $1  
+      OR invoices.status ILIKE $1  
+    `, [`%${query}%`]);  // Use an array to safely pass the parameter  
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE); // divide count by items per page to get the total number of pages. use Math.ceil to round up to the nearest integer.
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of invoices.');
+  }
+}
