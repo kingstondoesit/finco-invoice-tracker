@@ -1,6 +1,6 @@
 import {
   LatestInvoiceRaw, InvoicesTable,
-  Revenue,
+  Revenue, CustomersTableType
 } from './definitions';
 import { formatCurrency } from './utils';
 import dotenv from 'dotenv';
@@ -148,5 +148,23 @@ export async function fetchInvoicesPages(query: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch total number of invoices.');
+  }
+}
+
+export async function fetchCustomers() {
+  try {
+    const data = await client.query<CustomersTableType>(`
+      SELECT
+        id,
+        name
+      FROM customers
+      ORDER BY name ASC
+    `);
+
+    const customers = data.rows;
+    return customers;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all customers.');
   }
 }
