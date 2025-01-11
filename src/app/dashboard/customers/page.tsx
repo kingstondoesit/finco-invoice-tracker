@@ -1,5 +1,9 @@
 import { lusitana } from '@/app/ui/fonts';
 
+export const metadata = {
+  title: 'Customers',
+}
+
 export default async function Page() {
   return (
     <main>

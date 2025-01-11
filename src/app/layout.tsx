@@ -3,7 +3,10 @@ import "./ui/globals.css";
 import { geistMono, geistSans } from "@/app/ui/fonts";
 
 export const metadata: Metadata = {
-  title: "Dashboard App",
+  title: {
+    template: "%s | Finance Company Invoice Tracker",
+    default: "Home | Finance Company Invoice Tracker",
+  },
   description: "Seamlessly Generate, Track, and Manage Customer Invoices",
 };
 
