@@ -1,6 +1,6 @@
 import {
   LatestInvoiceRaw, InvoicesTable,
-  Revenue, CustomersTableType
+  Revenue, CustomersTableType, InvoiceForm
 } from './definitions';
 import { formatCurrency } from './utils';
 import dotenv from 'dotenv';
@@ -9,7 +9,7 @@ const { Client } = pkg;
 
 dotenv.config();
 
-const client = new Client({
+export const client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false,
@@ -148,6 +148,31 @@ export async function fetchInvoicesPages(query: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch total number of invoices.');
+  }
+}
+
+export async function fetchInvoiceById(id: string) {
+  try {
+    const data = await client.query<InvoiceForm>(`
+      SELECT
+        invoices.id,
+        invoices.customer_id,
+        invoices.amount,
+        invoices.status
+      FROM invoices
+      WHERE invoices.id = $1;
+    `, [id]);
+
+    const invoice = data.rows.map((invoice) => ({
+      ...invoice,
+      // Convert amount from cents to dollars
+      amount: invoice.amount / 100,
+    }));
+
+    return invoice[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch invoice.');
   }
 }
 
