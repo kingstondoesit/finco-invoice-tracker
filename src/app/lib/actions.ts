@@ -3,11 +3,7 @@
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { client } from './data';
-
-(async () => {
-  await client.connect();
-})().catch(error => console.error('Connection Error:', error));
+import { pool } from './data';
 
 const FormSchema = z.object({
   id: z.string(),
@@ -20,6 +16,7 @@ const FormSchema = z.object({
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
 
 export async function createInvoice(formData: FormData) {
+  const client = await pool.connect();
   try {
   const { customer_Id, amount, status } = CreateInvoice.parse({
     customer_Id: formData.get('customerId'),
