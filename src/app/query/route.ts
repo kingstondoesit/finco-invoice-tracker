@@ -9,7 +9,7 @@ async function listInvoices(client: VercelPoolClient) {
     return data.rows;  
 }  
 
-export async function fetchInvoicesPages(client: VercelPoolClient, query: string) {
+async function fetchInvoicesPages(client: VercelPoolClient, query: string) {
     const count = await client.query(`  
       SELECT COUNT(*)  
       FROM invoices  
