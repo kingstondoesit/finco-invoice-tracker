@@ -39,5 +39,59 @@ export async function createInvoice(formData: FormData) {
   
 } catch (error) {
   console.error('Error creating invoice:', error);
+
+} finally {
+  client.release();
 }
+}
+
+const UpdateInvoice = FormSchema.omit({ id: true, date: true });
+
+export async function updateInvoice(id: string, formData: FormData) {
+  const client = await pool.connect();
+  try {
+    const { customer_Id, amount, status } = UpdateInvoice.parse({
+      customer_Id: formData.get('customerId'),
+      amount: formData.get('amount'),
+      status: formData.get('status'),
+    });
+    const amountInCents = amount * 100;
+
+    await client.query(
+      `UPDATE invoices
+       SET customer_id = $1, amount = $2, status = $3
+       WHERE id = $4`,
+      [customer_Id, amountInCents, status, id]
+    );
+
+    console.log('Invoice updated successfully 🟢');
+
+    revalidatePath('/dashboard/invoices');
+    redirect('/dashboard/invoices');
+  } catch (error) {
+    console.error('Error updating invoice:', error);
+
+  } finally {
+  client.release();
+}
+}
+
+export async function deleteInvoice(id: string) {
+  const client = await pool.connect();
+  try {
+    await client.query(
+      `DELETE FROM invoices
+       WHERE id = $1`,
+      [id]
+    );
+
+    console.log('Invoice deleted successfully 🟢');
+
+    revalidatePath('/dashboard/invoices');
+
+  } catch (error) {
+    console.error('Error deleting invoice:', error);
+  } finally {
+    client.release();
+  }
 }
