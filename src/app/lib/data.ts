@@ -20,7 +20,16 @@ export async function fetchRevenue() {
   const client = await pool.connect(); 
   try {  
     const data = await client.query<Revenue>('SELECT * FROM revenue');  
-    return data.rows;  
+
+    // Format the data.rows revenue data from cents to dollars
+    const formattedData = data.rows.map(row => ({  
+      month: row.month,  
+      revenue: parseFloat((row.revenue / 100).toFixed(2)),   
+    }));  
+
+    console.log(formattedData)
+
+    return formattedData; 
   } catch (error) {  
     console.error('Database Error:', error);  
     throw new Error('Failed to fetch revenue data 🔴');  
@@ -83,7 +92,7 @@ export async function fetchCardData() {
     console.error('Database Error:', error);  
     throw new Error('Failed to fetch card data 🔴');  
   } finally {  
-    client.release(); // Release the client back to the pool  
+    client.release();
   }  
 }  
 
@@ -98,7 +107,7 @@ export async function fetchFilteredInvoices(
   console.log('QueryString:', queryString);  
   const client = await pool.connect();
   try {  
-    const client = await pool.connect(); // Acquire a client from the pool  
+    const client = await pool.connect(); 
     const invoices = await client.query<InvoicesTable>(`  
       SELECT  
         invoices.id,  
@@ -150,7 +159,7 @@ export async function fetchInvoicesPages(query: string) {
     console.error('Database Error:', error);  
     throw new Error('Failed to fetch total number of invoices.');  
   } finally {  
-    client.release(); // Release the client back to the pool  
+    client.release();
   }  
 }  
 
