@@ -37,6 +37,7 @@ export async function createInvoice(formData: FormData) {
     await updateRevenue();
 
     revalidatePath('/dashboard/invoices');
+    revalidatePath('/dashboard');
 
   } catch (error) {
     console.error('Error creating invoice:', error);
@@ -71,6 +72,8 @@ export async function updateInvoice(id: string, formData: FormData) {
     await updateRevenue();
 
     revalidatePath('/dashboard/invoices');
+    revalidatePath('/dashboard');
+
   } catch (error) {
     console.error('Error updating invoice:', error);
 
@@ -94,6 +97,7 @@ export async function deleteInvoice(id: string) {
     await updateRevenue();
 
     revalidatePath('/dashboard/invoices');
+    revalidatePath('/dashboard');
 
   } catch (error) {
     console.error('Error deleting invoice:', error);
