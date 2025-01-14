@@ -37,13 +37,13 @@ export async function createInvoice(formData: FormData) {
     await updateRevenue();
 
     revalidatePath('/dashboard/invoices');
-    redirect('/dashboard/invoices');
 
   } catch (error) {
     console.error('Error creating invoice:', error);
 
   } finally {
     client.release();
+    redirect('/dashboard/invoices');
   }
 }
 
@@ -71,12 +71,12 @@ export async function updateInvoice(id: string, formData: FormData) {
     await updateRevenue();
 
     revalidatePath('/dashboard/invoices');
-    redirect('/dashboard/invoices');
   } catch (error) {
     console.error('Error updating invoice:', error);
 
   } finally {
     client.release();
+    redirect('/dashboard/invoices');
   }
 }
 
