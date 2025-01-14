@@ -1,8 +1,8 @@
-# Financial Corporation Invoice Tracker
+# Finance Corporation Invoice Tracker
 
 ![login-kinde](./public/images/login-kinde.png)
 
-This is a financial corporation invoice tracker application built using Next.js, TypeScript, Tailwind CSS, and Kinde Auth. It is a prototype project built on the nextjs learn course to showcase how businesses can manage invoices and track their revenue.
+This is a finance corporation invoice tracker application built using Next.js, TypeScript, Tailwind CSS, and Kinde Auth. It is a prototype project built on the nextjs learn course to showcase how businesses can manage invoices and track their revenue.
 
 ## Additional Features
 
