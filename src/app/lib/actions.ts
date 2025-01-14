@@ -108,21 +108,47 @@ export async function updateRevenue() {
     // Delete the existing revenue data
     await client.query(`DELETE FROM revenue`);
 
-    // Insert new revenue data
+    // Create a list of all months from Jan to Dec  
+    const months = [
+      { month: 'Jan' }, { month: 'Feb' }, { month: 'Mar' },
+      { month: 'Apr' }, { month: 'May' }, { month: 'Jun' },
+      { month: 'Jul' }, { month: 'Aug' }, { month: 'Sep' },
+      { month: 'Oct' }, { month: 'Nov' }, { month: 'Dec' }
+    ];
+
+    // Calculate revenue for the months that have data  
+    const revenueQuery = `  
+          SELECT  
+              TO_CHAR(date::DATE, 'Mon') AS month,  
+              SUM(amount) AS revenue  
+          FROM  
+              invoices  
+          WHERE  
+              status = 'paid'  
+          GROUP BY  
+              TO_CHAR(date::DATE, 'Mon')  
+          ORDER BY  
+              MIN(date::DATE);  
+      `;
+
+    const revenueResult = await client.query(revenueQuery);
+
+    // Create a mapping from month to revenue  
+    const revenueMap = revenueResult.rows.reduce((acc, row) => {  
+      acc[row.month] = row.revenue;  
+      return acc;  
+  }, {});  
+
+    // Prepare insert statements for all months and their revenues  
+    const insertValues = months.map(m => {
+      const revenue = revenueMap[m.month] || null; // Use null if no revenue for the month  
+      return `('${m.month}', ${revenue})`;
+    }).join(', ');
+
+    // Insert all months with their associated revenue  
     await client.query(`  
-      INSERT INTO revenue (month, revenue)  
-    SELECT   
-      TO_CHAR(date::DATE, 'Mon') AS month,  
-      SUM(amount) AS revenue  
-    FROM   
-      invoices  
-    WHERE   
-      status = 'paid'  
-    GROUP BY   
-      TO_CHAR(date::DATE, 'Mon')  
-    ORDER BY   
-      MIN(date::DATE);  
-  `);
+          INSERT INTO revenue (month, revenue) VALUES ${insertValues}  
+      `);
 
     console.log("Revenue updated 🟢");
   } catch (error) {
@@ -130,4 +156,4 @@ export async function updateRevenue() {
   } finally {
     client.release();
   }
-}
+}  
