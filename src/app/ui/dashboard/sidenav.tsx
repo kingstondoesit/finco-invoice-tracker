@@ -4,7 +4,7 @@ import Link from 'next/link';
 import NavLinks from '@/app/ui/dashboard/nav-links';
 import AcmeLogo from '@/app/ui/acme-logo';
 import { PowerIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ConfirmationModal } from '@/app/ui/dashboard/modal';
 
 export default function SideNav() {
@@ -14,6 +14,22 @@ export default function SideNav() {
     e.preventDefault(); // Prevent immediate logout  
     setModalOpen(true); // Open the modal  
   };
+
+  useEffect(() => {  
+    const scrollLock = () => {  
+        if (isModalOpen) {  
+            document.body.style.overflow = 'hidden';  
+           
+        } else {  
+            document.body.style.overflow = '';  
+        }  
+    };  
+    scrollLock(); 
+
+    return () => {  
+        document.body.style.overflow = '';  
+    };  
+}, [isModalOpen]);  
 
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
