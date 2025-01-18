@@ -4,8 +4,37 @@ import Link from "next/link";
 // import styles from "@/app/ui/home.module.css";
 import { lusitana } from "@/app/ui/fonts";
 import Image from "next/image";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
-export default function Page() {
+// Landing Page Button Components
+type ButtonProps = {
+  href: string;
+  label: string;
+  icon?: React.ReactNode;
+  hidden?: boolean;
+};
+
+export function LandingButton({href, label, icon, hidden}: ButtonProps) {
+
+  if (hidden) {
+    return null;
+  }
+
+  return (
+    <Link
+      href={href}
+      className="flex items-center gap-2 sm:gap-4 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
+    >
+      <span>{label}</span>
+      {icon}
+    </Link>
+  );
+}
+
+export default async function Page() {
+  const session = getKindeServerSession();
+  const isAuthenticated = await session.isAuthenticated();
+
   return (
     <main className="flex min-h-screen flex-col p-6">
       {/* <div className={styles.shape} /> */}
@@ -24,20 +53,18 @@ export default function Page() {
             </span> customer invoices. <span className="text-blue-600"> <br />
               Monitor </span> company revenue - all in one place.
           </p>
-          <Link
+          <LandingButton
             href="/login"
-            className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
-          >
-            <span>Log in</span>
-            <ArrowRightIcon className="w-5 md:w-6" />
-          </Link>
-          <Link
+            label="Log in"
+            icon={<ArrowRightIcon className="w-5 md:w-6" />}
+            hidden={isAuthenticated}
+          />
+          <LandingButton
             href="/dashboard"
-            className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
-          >
-            <span>Dashboard</span>
-            <ArrowRightIcon className="w-5 md:w-6" />
-          </Link>
+            label="Dashboard"
+            icon={<ArrowRightIcon className="w-5 md:w-6" />}
+            hidden={!isAuthenticated}
+          />
         </div>
         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
           <Image
