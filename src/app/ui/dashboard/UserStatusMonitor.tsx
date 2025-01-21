@@ -2,12 +2,11 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import Cookies from 'js-cookie';
+import { LogoutLink, useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 export default function UserStatusMonitor() {
   const router = useRouter();
-  const { getUser, refreshData } = useKindeBrowserClient();
+  const { getUser } = useKindeBrowserClient();
 
   useEffect(() => {
     const checkUserStatus = async () => {
@@ -37,26 +36,23 @@ export default function UserStatusMonitor() {
         if (isSuspended) {
           console.log(`User ${currentUser.id} is suspended.`);
 
-          // Destroy related cookies
-          Cookies.remove('access_token', { path: '/' });
-          // Cookies.remove('refresh_token', { path: '/' });
-          // Cookies.remove('__clnds', { path: '/' });
-          // Cookies.remove('next-auth.callback-url', { path: '/' });
-          // Cookies.remove('next-auth.csrf-token', { path: '/' });
-
-          await refreshData();
-          router.push('/login'); // Redirect to login
+          // Simulate a click event on the logout link
+          const logoutLink = document.getElementById('logout-link');
+          if (logoutLink) {
+            logoutLink.click(); // This triggers the logout action
+          }
         }
+
       } catch (error) {
         console.error('Error during user status check:', error);
       }
     };
 
-    const interval = setInterval(checkUserStatus, 60000); // Check every minute
-    checkUserStatus(); // Immediate check on mount
-
+    const interval = setInterval(checkUserStatus, 30000); // Check every 30 seconds
     return () => clearInterval(interval);
-  }, [router, getUser, refreshData]);
+  }, [router, getUser]);
 
-  return null;
+  return (
+    <LogoutLink id="logout-link" className="hidden" >Sign-out</LogoutLink>
+  );
 }
