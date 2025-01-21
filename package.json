@@ -20,6 +20,7 @@
     "bcryptjs": "^2.4.3",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
+    "js-cookie": "^2.2.1",
     "next": "^15.1.2",
     "pg": "^8.13.1",
     "react": "^19.0.0",
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
