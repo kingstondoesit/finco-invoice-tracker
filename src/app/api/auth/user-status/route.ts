@@ -6,7 +6,7 @@ async function fetchUsers() {
   const response = await fetch(`${process.env.KINDE_ISSUER_URL}/api/v1/users`, {
     method: 'GET',
     headers: {
-      Authorization: `Bearer ${process.env.KIND_API_TOKEN}`,
+      Authorization: `Bearer ${process.env.KINDE_API_TOKEN}`,
       'Content-Type': 'application/json',
     },
   });
@@ -24,7 +24,7 @@ async function refreshUserClaims(user_id: string) {
   const response = await fetch(`${process.env.KINDE_ISSUER_URL}/api/v1/users/${user_id}/refresh_claims`, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${process.env.KIND_API_TOKEN}`,
+      Authorization: `Bearer ${process.env.KINDE_API_TOKEN}`,
       'Content-Type': 'application/json',
     },
   });

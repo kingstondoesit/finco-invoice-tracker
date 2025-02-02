@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./ui/globals.css";
 import { geistMono, geistSans } from "@/app/ui/fonts";
-import UserStatusMonitor from "./ui/dashboard/UserStatusMonitor";
+import UserStatusMonitor from "./ui/UserStatusMonitor";
 
 export const metadata: Metadata = {
   title: {
